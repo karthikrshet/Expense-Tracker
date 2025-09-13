@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Expense Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #74ABE2, #5563DE);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 10px;
+            margin: 5px;
+            width: 40%;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff7b54;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #ff5722;
+        }
+
+        .expenses {
+            margin-top: 20px;
+        }
+
+        .expense {
+            background-color: rgba(255,255,255,0.8);
+            color: #000;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        footer {
+            margin-top: 30px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        footer strong {
+            color: #ffdd57;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Expense Tracker</h1>
+
+        <input type="text" id="descInput" placeholder="Description" />
+        <input type="number" id="amountInput" placeholder="Amount" />
+        <br/>
+        <button id="addExpenseBtn">Add Expense</button>
+
+        <div class="expenses" id="expensesContainer"></div>
+    </div>
+
+    <footer>
+        Developed by <strong>Karthik Shet</strong>
+    </footer>
+
+    <script>
+        const descInput = document.getElementById('descInput');
+        const amountInput = document.getElementById('amountInput');
+        const addExpenseBtn = document.getElementById('addExpenseBtn');
+        const expensesContainer = document.getElementById('expensesContainer');
+
+        let expenses = [];
+
+        function renderExpenses() {
+            expensesContainer.innerHTML = '';
+            expenses.forEach((expense, index) => {
+                const expenseEl = document.createElement('div');
+                expenseEl.className = 'expense';
+                expenseEl.innerHTML = `
+                    <span>${expense.description}: $${expense.amount.toFixed(2)}</span>
+                    <button onclick="deleteExpense(${index})">🗑️</button>
+                `;
+                expensesContainer.appendChild(expenseEl);
+            });
+        }
+
+        function deleteExpense(index) {
+            expenses.splice(index, 1);
+            renderExpenses();
+        }
+
+        addExpenseBtn.addEventListener('click', () => {
+            const desc = descInput.value.trim();
+            const amount = parseFloat(amountInput.value.trim());
+
+            if (desc === "" || isNaN(amount) || amount <= 0) {
+                return alert('Please enter a valid description and amount.');
+            }
+
+            expenses.push({ description: desc, amount });
+            descInput.value = '';
+            amountInput.value = '';
+            renderExpenses();
+        });
+    </script>
+
+</body>
+
+</html>
